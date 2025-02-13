@@ -175,6 +175,7 @@ class SupportStrTest extends TestCase
         $this->assertTrue(Str::startsWith(7.123, '7'));
         $this->assertTrue(Str::startsWith(7.123, '7.12'));
         $this->assertFalse(Str::startsWith(7.123, '7.13'));
+        $this->assertFalse(Str::startsWith(null, 'Marc'));
         // Test for multibyte string support
         $this->assertTrue(Str::startsWith('Jönköping', 'Jö'));
         $this->assertTrue(Str::startsWith('Malmö', 'Malmö'));
@@ -207,6 +208,7 @@ class SupportStrTest extends TestCase
         $this->assertTrue(Str::endsWith(0.27, '7'));
         $this->assertTrue(Str::endsWith(0.27, '0.27'));
         $this->assertFalse(Str::endsWith(0.27, '8'));
+        $this->assertFalse(Str::endsWith(null, 'Marc'));
         // Test for multibyte string support
         $this->assertTrue(Str::endsWith('Jönköping', 'öping'));
         $this->assertTrue(Str::endsWith('Malmö', 'mö'));
@@ -506,6 +508,15 @@ class SupportStrTest extends TestCase
         $this->assertFalse(Str::is('*BAZ*', 'foo/bar/baz'));
         $this->assertFalse(Str::is('*FOO*', 'foo/bar/baz'));
         $this->assertFalse(Str::is('A', 'a'));
+
+        // is not case sensitive
+        $this->assertTrue(Str::is('A', 'a', true));
+        $this->assertTrue(Str::is('*BAZ*', 'foo/bar/baz', true));
+        $this->assertTrue(Str::is(['A*', 'B*'], 'a/', true));
+        $this->assertFalse(Str::is(['A*', 'B*'], 'f/', true));
+        $this->assertTrue(Str::is('FOO', 'foo', true));
+        $this->assertTrue(Str::is('*FOO*', 'foo/bar/baz', true));
+        $this->assertTrue(Str::is('foo/*', 'FOO/bar', true));
 
         // Accepts array of patterns
         $this->assertTrue(Str::is(['a*', 'b*'], 'a/'));
